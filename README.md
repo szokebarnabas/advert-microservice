@@ -1,2 +1,4 @@
 # advert-microservice
-Akka-Http microservice
+
+- akka-http
+- json4s
