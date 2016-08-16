@@ -16,5 +16,6 @@ libraryDependencies ++= Seq(
   "com.typesafe.akka" %% "akka-http-testkit" % "2.4.9-RC1",
   "org.scalatest" % "scalatest_2.11" % "3.0.0",
   "de.heikoseeberger" %% "akka-http-json4s" % "1.8.0",
-  "org.json4s" %% "json4s-jackson" % "3.2.11"
+  "org.json4s" %% "json4s-jackson" % "3.2.11",
+  "org.json4s" % "json4s-ext_2.11" % "3.4.0"
 )
