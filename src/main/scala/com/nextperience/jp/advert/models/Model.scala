@@ -1,13 +1,16 @@
 package com.nextperience.jp.advert.models
 
 import com.nextperience.jp.advert.models.Model.JobType.JobType
-import reactivemongo.bson.{BSONDocument, BSONDocumentReader, BSONDocumentWriter, BSONObjectID}
+import reactivemongo.bson.{BSONDocument, BSONDocumentReader, BSONDocumentWriter, BSONObjectID, Macros}
 
 
 object Model {
 
-  case class Advert(id: Int, title: String, description: String, salary: Int, jobType: JobType, owner: String)
+  case class Advert(id: Int, title: String, description: String, salary: Int, jobType: String, owner: String)
 
+  object Advert {
+    implicit val personHandler = Macros.handler[Advert]
+  }
 //  object Advert {
 //
 //    implicit object AdvertEntityBSONReader extends BSONDocumentReader[Advert] {

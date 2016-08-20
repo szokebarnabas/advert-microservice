@@ -1,16 +1,16 @@
 package com.nextperience.jp.advert.infrastructure.persistence
 
 import com.nextperience.jp.advert.models.Model.Advert
-import reactivemongo.api.collections.bson.BSONCollection
+import reactivemongo.api.{DB, MongoDriver}
+import reactivemongo.bson.BSONObjectID
+import reactivemongo.extensions.dao.BsonDao
+
 import scala.concurrent.ExecutionContext.Implicits.global
 
-
-trait AdvertRepository extends MongoRepository {
-
-  val collection = db[BSONCollection]("advert")
-
-  def save(advertEntity: Advert) = {
-    val result = collection.insert(advertEntity)
-    println(result)
-  }
+object MongoContext {
+  val driver = new MongoDriver
+  val connection = driver.connection(List("localhost"))
+  def db: DB = connection("advert-db")
 }
+
+object AdvertRepository extends BsonDao[Advert, BSONObjectID](MongoContext.db, "advert")
