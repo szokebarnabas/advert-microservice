@@ -1,17 +1,18 @@
-package com.nextperience.jp.advert.http.routes
+package com.nextperience.jp.advert.utils
 
-import com.nextperience.jp.advert.models.Model.JobType
+import com.nextperience.jp.advert.models.Model.{Advert, Id, JobType}
 import com.nextperience.jp.advert.models.Model.JobType.JobType
-import de.heikoseeberger.akkahttpjson4s.Json4sSupport
-import org.json4s.{DefaultFormats, jackson}
-import reactivemongo.bson.{BSONReader, BSONString, BSONValue, BSONWriter}
+import reactivemongo.bson.{BSONReader, BSONString, BSONValue, BSONWriter, Macros}
 
+trait BsonImplicits {
 
-trait JsonSupport extends Json4sSupport {
-  import org.json4s.ext.EnumNameSerializer
+  implicit object IdWriter extends BSONWriter[Id, BSONString] {
+    def write(t: Id): BSONString = BSONString(t.toString)
+  }
 
-  implicit val serialization = jackson.Serialization
-  implicit val formats = DefaultFormats + new EnumNameSerializer(JobType)
+  implicit object IdReader extends BSONReader[BSONValue, Id] {
+    def read(bson: BSONValue): Id = Id("123")
+  }
 
   implicit object JobTypeBsonWriter extends BSONWriter[JobType, BSONString] {
     def write(t: JobType): BSONString = BSONString(t.toString)
@@ -26,4 +27,5 @@ trait JsonSupport extends Json4sSupport {
       case BSONString("PART_TIME") => JobType.PART_TIME
     }
   }
+
 }

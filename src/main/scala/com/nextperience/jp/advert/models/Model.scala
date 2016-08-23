@@ -1,29 +1,18 @@
 package com.nextperience.jp.advert.models
 
+import java.util.UUID
+
 import com.nextperience.jp.advert.models.Model.JobType.JobType
-import reactivemongo.bson.{BSONReader, BSONString, BSONValue, BSONWriter, Macros}
+import com.nextperience.jp.advert.utils.BsonImplicits
+import reactivemongo.bson.{BSONObjectID, Macros}
 
 
-object Model {
+object Model extends BsonImplicits {
 
-  case class Advert(id: Int, title: String, description: String, salary: Int, jobType: JobType, owner: String)
+  case class Id(id: String)
+  case class Advert(id: Option[String], title: String, description: String, salary: Int, jobType: JobType, owner: String)
 
   object Advert {
-
-    implicit object JobTypeBsonWriter extends BSONWriter[JobType, BSONString] {
-      def write(t: JobType): BSONString = BSONString(t.toString)
-    }
-
-    implicit object JobTypeBsonReader extends BSONReader[BSONValue, JobType] {
-      def read(bson: BSONValue): JobType = bson match {
-        case BSONString("PERMANENT") => JobType.PERMANENT
-        case BSONString("CONTRACT") => JobType.CONTRACT
-        case BSONString("TEMPORARY") => JobType.TEMPORARY
-        case BSONString("FULL_TIME") => JobType.FULL_TIME
-        case BSONString("PART_TIME") => JobType.PART_TIME
-      }
-    }
-
     implicit val personHandler = Macros.handler[Advert]
   }
 

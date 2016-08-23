@@ -4,8 +4,16 @@ import akka.http.scaladsl.model.{HttpResponse, StatusCodes}
 import akka.http.scaladsl.server.Directives
 import com.nextperience.jp.advert.models.Model.Advert
 import com.nextperience.jp.advert.services.AdvertService
+import scala.util.{Failure, Success}
+
+import scala.concurrent.ExecutionContext.Implicits.global
+import scala.concurrent.Future
 
 class AdvertServiceRoute(advertService: AdvertService) extends Directives with JsonSupport {
+
+  def divide(a: Int, b: Int): Future[Int] = Future {
+    a / b
+  }
 
   val route =
     pathPrefix("advert") {
@@ -24,14 +32,11 @@ class AdvertServiceRoute(advertService: AdvertService) extends Directives with J
             }
           }
       } ~
-        path(IntNumber) { id =>
-          get {
-            complete {
-              advertService.get(id) match {
-                case Some(advert) => advert
-                case None => HttpResponse(StatusCodes.NotFound, entity = "Advert not found")
-              }
-            }
+        path(Segment) { id =>
+          onComplete(advertService.get(id)) {
+            case Success(Some(value)) => complete(value)
+            case Success(None) => complete(HttpResponse(StatusCodes.NotFound, entity = s"Advert not found: $id"))
+            case Failure(ex)    => complete(ex)
           }
         }
     }
