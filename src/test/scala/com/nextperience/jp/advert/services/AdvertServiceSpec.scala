@@ -16,9 +16,9 @@ class AdvertServiceSpec extends WordSpec with Matchers with ScalatestRouteTest w
   private val advert3: Advert = Advert(None, "title3", "desc3", 30000, JobType.CONTRACT, "me")
   private val advert4: Advert = Advert(None, "title4", "desc4", 50000, JobType.CONTRACT, "me")
 
-  advertService.addNewAdvert(advert1)
-  advertService.addNewAdvert(advert2)
-  advertService.addNewAdvert(advert3)
+  advertService.save(advert1)
+  advertService.save(advert2)
+  advertService.save(advert3)
 
   "Advert API" should {
     "returns all of the adverts" in {

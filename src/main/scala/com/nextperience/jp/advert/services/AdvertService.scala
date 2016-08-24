@@ -13,6 +13,7 @@ import scala.concurrent.Future
 class AdvertService {
 
   protected val logger = LoggerFactory.getLogger(this.getClass)
+
   def getAll(): Future[List[Advert]] = AdvertRepository.findAll()
 
   def get(id: String): Future[Option[Advert]] = {
@@ -20,9 +21,14 @@ class AdvertService {
     AdvertRepository.findOne(query)
   }
 
-  def addNewAdvert(advert: Advert): Unit = {
+  def save(advert: Advert): Unit = {
     logger.error("new advert")
     AdvertRepository.insert(advert.copy(id = Some(UUID.randomUUID().toString)))
+  }
+
+  def update(advert: Advert) = {
+    val selector = BSONDocument("id" -> BSONDocument("$eq" -> advert.id))
+    AdvertRepository.update(selector, advert)
   }
 
 }
